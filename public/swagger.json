@@ -27,18 +27,18 @@
                             "application/json": [
                                 {
                                     "id": 1,
-                                    "name": "Bobby",
-                                    "race": "Labrador",
+                                    "name": "rayo",
+                                    "race": "Chichawua",
                                     "category": "Perro",
-                                    "photo": "url_to_photo",
+                                    "photo": "photo",
                                     "gender": "Macho"
                                 },
                                 {
                                     "id": 2,
-                                    "name": "Kitty",
+                                    "name": "KFer",
                                     "race": "Siamese",
                                     "category": "Gato",
-                                    "photo": "url_to_photo",
+                                    "photo": "photo",
                                     "gender": "Hembra"
                                 }
                             ]
@@ -55,7 +55,7 @@
                         "required": true,
                         "schema": {
                             "example": {
-                                "name": "Bobby",
+                                "name": "loco",
                                 "race": 1,
                                 "category": 1,
                                 "photo": "url_to_photo",
@@ -74,7 +74,7 @@
                             "application/json": {
                                 "value": {
                                     "id": 1,
-                                    "name": "Bobby",
+                                    "name": "loco",
                                     "race": 1,
                                     "category": 1,
                                     "photo": "url_to_photo",
@@ -106,8 +106,8 @@
                         "examples": {
                             "application/json": {
                                 "id": 1,
-                                "name": "Bobby",
-                                "race": "Labrador",
+                                "name": "mike",
+                                "race": "criollo",
                                 "category": "Perro",
                                 "photo": "url_to_photo",
                                 "gender": "Macho"
@@ -205,14 +205,14 @@
                             "application/json": [
                                 {
                                     "id": 1,
-                                    "name": "Frand",
-                                    "email": "frand@gmail.com",
+                                    "name": "johan",
+                                    "email": "johan@gmail.com",
                                     "password": "password"
                                 },
                                 {
                                     "id": 2,
-                                    "name": "Santiago",
-                                    "email": "santiago@gmail.com",
+                                    "name": "gordo",
+                                    "email": "gordo@gmail.com",
                                     "password": "password2"
                                 }
                             ]
@@ -229,8 +229,8 @@
                         "required": true,
                         "schema": {
                             "example": {
-                                "name": "Frand",
-                                "email": "frand@gmail.com",
+                                "name": "johan",
+                                "email": "johan@gmail.com",
                                 "password": "password"
                             }
                         }
@@ -246,8 +246,8 @@
                             "application/json": {
                                 "value": {
                                     "id": 1,
-                                    "name": "Frand",
-                                    "email": "frand@gmail.com",
+                                    "name": "johan",
+                                    "email": "johan@gmail.com",
                                     "password": "password"
                                 }
                             }
@@ -276,8 +276,8 @@
                         "examples": {
                             "application/json": {
                                 "id": 1,
-                                "name": "Frand",
-                                "email": "frand@gmail.com",
+                                "name": "johan",
+                                "email": "johan@gmail.com",
                                 "password": "password"
                             }
                         }
@@ -299,8 +299,8 @@
                         "required": true,
                         "schema": {
                             "example": {
-                                "name": "Frand Update",
-                                "email": "frand@gmail.com",
+                                "name": "johan Update",
+                                "email": "johan@gmail.com",
                                 "password": "password"
                             }
                         }
@@ -315,8 +315,8 @@
                         "examples": {
                             "application/json": {
                                 "id": 1,
-                                "name": "Frand Update",
-                                "email": "frand@gmail.com",
+                                "name": "johan Update",
+                                "email": "johan@gmail.com",
                                 "password": "password"
                             }
                         }
@@ -342,8 +342,8 @@
                         "examples": {
                             "application/json": {
                                 "id": 1,
-                                "name": "Frand Update",
-                                "email": "frand@gmail.com",
+                                "name": "johan Update",
+                                "email": "johan@gmail.com",
                                 "password": "password"
                             }
                         }
