@@ -2,16 +2,18 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import camera from "../../img/photo-lg-0.svg"
-import arrows from "../../img/arrows.svg"
-import btnClose from "../../img/btn-close.svg"
 import btnUpdate from "../../img/btn-update.svg"
 import btnBack from "../../img/btn-back.svg"
+import iconCamera from "../../img/icon-camera.svg"
 import Image from 'next/image'
 import axios from 'axios';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import Close from "../../components/Close"
+import { protectRoutes } from "../../components/Protect"
 
 function page() {
+
+  const router = useRouter();
 
   const [razas, setRazas] = useState([])
   const [category, setCategory] = useState([])
@@ -24,7 +26,6 @@ function page() {
     name: "",
     race_id: "",
     category_id: "",
-    photo: "img update",
     gender_id: "",
   })
 
@@ -32,6 +33,7 @@ function page() {
     try {
         const respuesta = await axios.get(`http://localhost:3000/api/mascotas/${id}`)
         const mascotaData = respuesta.data;
+        setMascota(mascotaData)
       setPet({
         name: mascotaData.name,
         race_id: mascotaData.race_id,
@@ -40,7 +42,7 @@ function page() {
         photo: mascotaData.photo || "img update"
       });
     } catch (error) {
-        console.log(error.reponse.data);
+        console.log(error);
     }
  }
 
@@ -83,21 +85,26 @@ function page() {
   const putMascota = async (event) => {
     event.preventDefault();
     try {
-      if (!pet.race_id) {
-        console.log("El campo 'race_id' es requerido");
-        return;
+
+      const datos = new FormData();
+      datos.append('name', pet.name);
+      datos.append('race_id', parseInt(pet.race_id, 10));
+      datos.append('category_id', parseInt(pet.category_id, 10));
+      datos.append('gender_id', parseInt(pet.gender_id, 10));
+      datos.append('photo', file);
+      
+      console.log("FormData before send:", Array.from(datos.entries()));
+
+      const update = await axios.put(`http://localhost:3000/api/mascotas/${id}`, datos, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+      },
+    }
+      );
+      if (update.status === 200) {
+        alert("actualización exitosa");
       }
-  
-      const petData = {
-        name: pet.name,
-        race_id: parseInt(pet.race_id, 10),
-        category_id: parseInt(pet.category_id, 10),
-        gender_id: parseInt(pet.gender_id, 10),
-        photo: pet.photo
-      };
-  
-      const update = await axios.put(`http://localhost:3000/api/mascotas/${id}`, petData);
-      console.log(update);
+      router.push('/pets')
     } catch (error) {
       console.log(error.response.data);
     }
@@ -114,7 +121,7 @@ function page() {
 
   return (
     <div className='flex justify-center items-center'>
-      <div className='bg-back-image bg-cover bg-center md:w-1/4 w-full h-screen flex  flex-col p-3 gap-3'>
+      <div className='bg-back-image bg-auto bg-center md:w-1/4 w-full h-screen flex  flex-col p-3 gap-3'>
     <div className='flex h-12 w-full justify-center items-center gap-4' >
     <Link href="/pets">
         <Image
@@ -123,30 +130,28 @@ function page() {
         />
         </Link>
     <h1 className='text-white text-center w-full'>Modificar mascotas</h1>
-       <Link href="/">
-          <Image
-          src={btnClose}
-          alt='btn cerrar'
-          />
-         </Link>
+      <Close/>
     </div>
     <div className='h-64 flex justify-center items-center'>
          <div className='rounded-full w-32 h-32 bg-green-100 border-2 border-gray-500 flex justify-center items-center'>
          {
-            file && file ? (
+            file && file ? ( 
             <Image
-            className='rounded-full w-full'
+            className='h-full w-full object-cover rounded-full'
             src={URL.createObjectURL(file)}
             alt='img'
             width={100}
             height={100}
             />
-          ): 
-            <Image
-            src={camera}
-            alt='camera'
-            />
-          }
+            ): (
+              <img 
+              src={`/img/${mascota.photo}`} 
+              alt={mascota.name} 
+              className="h-full w-full object-cover rounded-full" />
+            
+            )
+          } 
+          
          </div>
          
         </div>
@@ -154,8 +159,9 @@ function page() {
         <form className='flex flex-col items-center gap-3' onSubmit={putMascota}>
             <input name='name' onChange={inputValue} value={pet.name}
             className='p-3 w-full bg-[#ffffffa5] outline-none placeholder:text-[#252f7c] rounded-[30px]' type="text" />
+            <div className='p-2 w-full bg-[#ffffffa5] outline-none flex justify-between rounded-[30px]'>
             <select name='race_id' onChange={inputValue} value={pet.race_id}
-            className='p-3 w-full bg-[#ffffffa5] outline-none   rounded-[30px]'>
+            className='w-full bg-transparent p-1 outline-none'>
               {
                 razas.map(raza => (
                   <option key={raza.id} value={raza.id}>
@@ -164,8 +170,10 @@ function page() {
                 ))
               }
             </select>
+            </div>
+            <div className='p-2 w-full bg-[#ffffffa5] outline-none flex justify-between rounded-[30px]'>
             <select name='category_id' onChange={inputValue} value={pet.category_id}
-             className='p-3 w-full bg-[#ffffffa5] outline-none  rounded-[30px]'>
+             className='w-full bg-transparent p-1 outline-none'>
               {
                 category.map(category => (
                   <option key={category.id} value={category.id}>
@@ -174,13 +182,28 @@ function page() {
                 ))
               }
             </select>
-            <input name='photo' 
-            onChange={(e) => {
-              setFile(e.target.files[0])
-            }}
-            className='p-3 w-full bg-[#ffffffa5] outline-none placeholder:text-[#252f7c] rounded-[30px]' type="file" placeholder='Subir Foto' />
+            </div>
+            <div className="p-3 w-full bg-[#ffffffa5] outline-none flex justify-between rounded-[30px]">
+              <input
+                name="photo"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                }}
+                className="absolute opacity-0 w-full"
+                type="file"
+                accept="image/*"
+              />
+              <span className="outline-none cursor-pointer">
+                Subir Foto
+              </span>
+              <Image
+                  src={iconCamera}
+                  alt='camera'
+                />
+            </div>
+            <div className='p-2 w-full bg-[#ffffffa5] outline-none flex justify-between rounded-[30px]'>
             <select name='gender_id' onChange={inputValue} value={pet.gender_id}
-             className='p-3 w-full bg-[#ffffffa5] outline-none  rounded-[30px]'>
+             className='w-full bg-transparent p-1 outline-none'>
               {
                 genders.map(gender => (
                   <option key={gender.id} value={gender.id}>
@@ -189,6 +212,7 @@ function page() {
                 ))
               }
             </select>
+            </div>
             <button type='submit'>
             <Image  src={btnUpdate} 
         alt='btn close'/>
@@ -200,4 +224,4 @@ function page() {
   )
 }
 
-export default page
+export default protectRoutes(page)

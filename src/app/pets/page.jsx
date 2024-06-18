@@ -4,15 +4,16 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
 import btnAdd from "../img/btn-add.svg";
-import btnClose from "../img/btn-close.svg";
 import btnDelete from "../img/btn-delete.svg";
 import btnEdit from "../img/btn-edit.svg";
 import btnShow from "../img/btn-show.svg";
 import btnBack from "../img/btn-back.svg"
-
 import Image from 'next/image';
+import Close from "../components/Close"
+import { protectRoutes } from "../components/Protect"
 
 function page() {
+
 
   const [mascotas, setMascotas] = useState([])
 
@@ -27,6 +28,8 @@ function page() {
     getMascotas();
     return alert("mascota eliminada")
   }
+
+
   useEffect (() => {
     getMascotas()
   },[])
@@ -34,21 +37,12 @@ function page() {
 
   return (
    <div className='flex justify-center items-center'>
-     <div className='bg-back-image bg-cover bg-center   md:w-1/4 w-full h-screen flex  flex-col p-3 gap-3'>
+     <div className='bg-back-image bg-cover bg-center md:w-1/4 w-full h-screen flex  flex-col p-3 gap-3'>
        <div className='flex h-12 w-full justify-center items-center gap-4 ' >
-        <Link href="/">
-        <Image
-        src={btnBack}
-        alt='btn-back'
-        />
-        </Link>
        <h1 className='text-white text-center w-full'>Administrar mascotas</h1>
-             <Link href="/">
-            <Image
-        src={btnClose}
-        alt='btn-close'
-        />
-           </Link>
+           
+           <Close/>
+           
        </div>
        <div>
         <Link href="/registrar">
@@ -58,14 +52,19 @@ function page() {
           />
         </Link>
        </div>
-      <div className='h-4/5 overflow-scroll '>
+      <div className='h-4/5 overflow-y-auto overflow-x-hidden'>
       {
         mascotas.map(mascota => (
           <div key={mascota.id} className='bg-[#ffffff81] rounded-[25px] p-3 flex mb-3 '>
           <div  className='flex w-2/3 justify-center items-center gap-2'>
-            <div className='h-20 w-20 bg-white border-blue-500 border-[2px] rounded-full flex justify-center items-center'>{mascota.photo}</div>
+            <div className='h-20 w-20 bg-white border-[#1f204db4] border-[2px] rounded-full flex justify-center items-center'>
+            <img 
+            src={`/img/${mascota.photo}`} 
+            alt={mascota.name} 
+            className="h-full w-full object-cover rounded-full" />
+              </div>
             <div className="flex flex-col w-1/3">
-              <h1 className='font-bold text-blue-800'>{mascota.name}</h1> 
+              <h1 className='font-bold text-[#10103577]'>{mascota.name}</h1> 
               <h2 className='text-gray-700'>{mascota.race}</h2>
               </div>
           </div>
@@ -105,4 +104,4 @@ function page() {
   )
 }
 
-export default page
+export default protectRoutes(page)
